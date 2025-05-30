@@ -27,6 +27,11 @@ const main = async () => {
         value: "local",
       },
       {
+        name: "Staging",
+        value: "staging",
+      },
+
+      {
         name: "Dev",
         value: "dev",
       },
@@ -42,6 +47,9 @@ const main = async () => {
   if (environment === "local") {
     apiUrl = "http://localhost:3000";
     apiKey = process.env.LOCAL_API_KEY || "";
+  } else if (environment === "staging") {
+    apiUrl = "https://staging.orchestrator.rhinestone.dev";
+    apiKey = process.env.STAGING_API_KEY || "";
   } else if (environment === "dev") {
     apiUrl = "https://dev.orchestrator.rhinestone.dev";
     apiKey = process.env.DEV_API_KEY || "";
