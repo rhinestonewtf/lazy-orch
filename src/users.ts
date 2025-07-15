@@ -40,5 +40,5 @@ export const addUser = async ({
   }
 
   const data = await response.json();
-  return data;
+  console.log(data);
 };

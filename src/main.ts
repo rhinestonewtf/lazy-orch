@@ -2,7 +2,7 @@ import { checkbox, select } from "@inquirer/prompts";
 import { config } from "dotenv";
 import { addUser } from "./users";
 import { getIntentStatus } from "./intents";
-import { checkChainStatus } from "./chain";
+import { simulateFailedIntent } from "./simulate";
 config();
 
 const getEnv = async () => {
@@ -80,28 +80,26 @@ const main = async () => {
         value: "intentStatus",
       },
       {
-        name: "Check chain status",
-        value: "checkChainStatus",
+        name: "Simulate failed intent",
+        value: "simulateFailedIntent",
       },
     ],
   });
 
   if (action == "addUser") {
     const { apiUrl, apiKey } = await getEnv();
-    const response = await addUser({
+    await addUser({
       apiUrl,
       apiKey,
     });
-    console.log(response);
   } else if (action == "intentStatus") {
     const { apiUrl, apiKey } = await getEnv();
-    const response = await getIntentStatus({
+    await getIntentStatus({
       apiUrl,
       apiKey,
     });
-    console.log(response);
-  } else if (action == "checkChainStatus") {
-    await checkChainStatus();
+  } else if (action == "simulateFailedIntent") {
+    await simulateFailedIntent();
   }
 };
 
