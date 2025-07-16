@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import { addUser } from "./users";
 import { getIntentStatus } from "./intents";
 import { simulateFailedIntent } from "./simulate";
+import { giveApprovals } from "./approvals";
 config();
 
 const getEnv = async () => {
@@ -40,8 +41,8 @@ const getEnv = async () => {
     ],
   });
 
-  let apiUrl: string;
-  let apiKey: string;
+  let apiUrl: string = "";
+  let apiKey: string = "";
   if (environment === "local") {
     apiUrl = "http://localhost:3000";
     apiKey = process.env.LOCAL_API_KEY || "";
@@ -83,6 +84,10 @@ const main = async () => {
         name: "Simulate failed intent",
         value: "simulateFailedIntent",
       },
+      {
+        name: "Make relayer approvals",
+        value: "giveApprovals",
+      },
     ],
   });
 
@@ -100,6 +105,8 @@ const main = async () => {
     });
   } else if (action == "simulateFailedIntent") {
     await simulateFailedIntent();
+  } else if (action == "giveApprovals") {
+    await giveApprovals();
   }
 };
 

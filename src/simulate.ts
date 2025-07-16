@@ -1,31 +1,8 @@
 import { input, select } from "@inquirer/prompts";
 import clipboard from "clipboardy";
-import { Address, Hex } from "viem";
-import {
-  arbitrum,
-  base,
-  Chain,
-  foundry,
-  mainnet,
-  optimism,
-  polygon,
-} from "viem/chains";
-
-const supportedChains = [mainnet, base, arbitrum, optimism, polygon, foundry];
-
-type Simulation = {
-  success: false;
-  call: {
-    chainid: number;
-    to: Address;
-    value: string;
-    data: Hex;
-  };
-  details: {
-    blockNumber: string;
-    relayer: string;
-  };
-};
+import { Chain } from "viem/chains";
+import { Simulation } from "./types";
+import { supportedChains } from "./constants";
 
 export const simulateFailedIntent = async () => {
   const simulationJSON = await input({
