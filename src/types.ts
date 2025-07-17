@@ -1,3 +1,5 @@
+import { Address, Hex } from "viem";
+
 export type Simulation = {
   success: false;
   call: {

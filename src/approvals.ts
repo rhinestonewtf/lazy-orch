@@ -4,12 +4,14 @@ import { Chain } from "viem/chains";
 import { Simulation } from "./types";
 import { supportedChains, supportedTokens } from "./constants";
 import {
+  Address,
   createPublicClient,
   createWalletClient,
   defineChain,
   erc20Abi,
   Hex,
   http,
+  maxUint256,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { getTokenAddress } from "@rhinestone/sdk/orchestrator";
@@ -120,6 +122,42 @@ export const giveApprovals = async () => {
 
   const shouldApprove = await confirm({ message: "Make approvals?" });
   if (shouldApprove) {
-    // todo
+    for (const approval of formattedApprovals) {
+      if (BigInt(approval.allowance ?? 0n) < 1000000000n) {
+        const tokenAddress = getTokenAddress(
+          approval.token,
+          (chain as Chain).id,
+        );
+        console.log(
+          `Approving ${approval.token} (${tokenAddress}) for spender ${spenderAddress}`,
+        );
+
+        const txHash = await walletClient.writeContract({
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: "approve",
+          args: [spenderAddress as Address, 1n],
+        });
+
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: txHash,
+        });
+
+        if (receipt.status !== "success") {
+          console.error(
+            `Transaction failed: ${(chain as Chain).blockExplorers?.default}${txHash}`,
+          );
+          continue;
+        }
+
+        console.log(
+          `Approved ${approval.token} for spender ${spenderAddress} with tx hash: ${txHash}`,
+        );
+      } else {
+        console.log(
+          `Already approved ${approval.token} for spender ${spenderAddress}`,
+        );
+      }
+    }
   }
 };

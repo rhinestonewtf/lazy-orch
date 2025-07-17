@@ -1,10 +1,16 @@
 import {
   arbitrum,
+  arbitrumSepolia,
   base,
+  baseSepolia,
   foundry,
   mainnet,
   optimism,
+  optimismSepolia,
   polygon,
+  sepolia,
+  soneium,
+  zksync,
 } from "viem/chains";
 
 export const supportedChains = [
@@ -13,6 +19,12 @@ export const supportedChains = [
   arbitrum,
   optimism,
   polygon,
+  zksync,
+  soneium,
+  sepolia,
+  baseSepolia,
+  arbitrumSepolia,
+  optimismSepolia,
   foundry,
 ];
 
