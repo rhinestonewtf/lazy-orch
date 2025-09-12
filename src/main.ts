@@ -1,9 +1,9 @@
-import { checkbox, select } from "@inquirer/prompts";
+import { select } from "@inquirer/prompts";
 import { config } from "dotenv";
-import { addUser } from "./users";
-import { getIntentStatus } from "./intents";
-import { simulateFailedIntent } from "./simulate";
-import { giveApprovals } from "./approvals";
+import { addUser, listUsers } from "./users";
+import { addOrg, addUserToOrg, listOrgs } from "./orgs";
+import { addProject, updateProjectAttributes } from "./projects";
+import { getSponsor } from "./sponsor";
 config();
 
 const getEnv = async () => {
@@ -15,28 +15,17 @@ const getEnv = async () => {
         value: "local",
       },
       {
+        name: "Dev",
+        value: "dev",
+      },
+
+      {
         name: "Staging",
         value: "staging",
       },
       {
-        name: "Dev",
-        value: "dev",
-      },
-      {
         name: "Prod",
         value: "prod",
-      },
-      {
-        name: "Staging v1",
-        value: "staging-v1",
-      },
-      {
-        name: "Dev v1",
-        value: "dev-v1",
-      },
-      {
-        name: "Prod v1",
-        value: "prod-v1",
       },
     ],
   });
@@ -46,22 +35,13 @@ const getEnv = async () => {
   if (environment === "local") {
     apiUrl = "http://localhost:3000";
     apiKey = process.env.LOCAL_API_KEY || "";
-  } else if (environment === "staging") {
-    apiUrl = "https://staging.orchestrator.rhinestone.dev";
-    apiKey = process.env.STAGING_API_KEY || "";
   } else if (environment === "dev") {
-    apiUrl = "https://dev.orchestrator.rhinestone.dev";
-    apiKey = process.env.DEV_API_KEY || "";
-  } else if (environment === "prod") {
-    apiUrl = "https://orchestrator.rhinestone.dev";
-    apiKey = process.env.PROD_API_KEY || "";
-  } else if (environment === "staging-v1") {
-    apiUrl = "https://staging.v1.orchestrator.rhinestone.dev";
-    apiKey = process.env.STAGING_API_KEY || "";
-  } else if (environment === "dev-v1") {
     apiUrl = "https://dev.v1.orchestrator.rhinestone.dev";
     apiKey = process.env.DEV_API_KEY || "";
-  } else if (environment === "prod-v1") {
+  } else if (environment === "staging") {
+    apiUrl = "https://staging.v1.orchestrator.rhinestone.dev";
+    apiKey = process.env.STAGING_API_KEY || "";
+  } else if (environment === "prod") {
     apiUrl = "https://v1.orchestrator.rhinestone.dev";
     apiKey = process.env.PROD_API_KEY || "";
   }
@@ -77,16 +57,29 @@ const main = async () => {
         value: "addUser",
       },
       {
-        name: "Intent status",
-        value: "intentStatus",
+        name: "Add org",
+        value: "addOrg",
       },
       {
-        name: "Simulate failed intent",
-        value: "simulateFailedIntent",
+        name: "Add project",
+        value: "addProject",
       },
       {
-        name: "Make relayer approvals",
-        value: "giveApprovals",
+        name: "Add user to org",
+        value: "addUserToOrg",
+      },
+      { name: "Update project attributes", value: "updateProjectAttributes" },
+      {
+        name: "List users",
+        value: "listUsers",
+      },
+      {
+        name: "List orgs",
+        value: "listOrgs",
+      },
+      {
+        name: "Get sponsor",
+        value: "getSponsor",
       },
     ],
   });
@@ -97,16 +90,48 @@ const main = async () => {
       apiUrl,
       apiKey,
     });
-  } else if (action == "intentStatus") {
+  } else if (action == "addOrg") {
     const { apiUrl, apiKey } = await getEnv();
-    await getIntentStatus({
+    await addOrg({
       apiUrl,
       apiKey,
     });
-  } else if (action == "simulateFailedIntent") {
-    await simulateFailedIntent();
-  } else if (action == "giveApprovals") {
-    await giveApprovals();
+  } else if (action == "addProject") {
+    const { apiUrl, apiKey } = await getEnv();
+    await addProject({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "addUserToOrg") {
+    const { apiUrl, apiKey } = await getEnv();
+    await addUserToOrg({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "updateProjectAttributes") {
+    const { apiUrl, apiKey } = await getEnv();
+    await updateProjectAttributes({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "listUsers") {
+    const { apiUrl, apiKey } = await getEnv();
+    await listUsers({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "listOrgs") {
+    const { apiUrl, apiKey } = await getEnv();
+    await listOrgs({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "getSponsor") {
+    const { apiUrl, apiKey } = await getEnv();
+    await getSponsor({
+      apiUrl,
+      apiKey,
+    });
   }
 };
 

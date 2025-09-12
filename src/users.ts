@@ -1,4 +1,4 @@
-import { checkbox, input } from "@inquirer/prompts";
+import { input } from "@inquirer/prompts";
 
 export const addUser = async ({
   apiUrl,
@@ -7,20 +7,8 @@ export const addUser = async ({
   apiUrl: string;
   apiKey: string;
 }) => {
-  const name = await input({
-    message: "Enter the username:",
-  });
-  const attributesInput = await checkbox({
-    message: "Select user attributes (optional)",
-    choices: [
-      { name: "Event publisher", value: "event-publisher" },
-      { name: "Relayer", value: "relayer" },
-    ],
-  });
-
-  const attributes: Record<string, boolean> = {};
-  attributesInput.forEach((attr) => {
-    attributes[attr] = true;
+  const email = await input({
+    message: "Enter the email:",
   });
 
   const response = await fetch(`${apiUrl}/users`, {
@@ -30,8 +18,7 @@ export const addUser = async ({
       "X-API-Key": apiKey,
     },
     body: JSON.stringify({
-      name,
-      attributes: { scopes: attributes },
+      email,
     }),
   });
 
@@ -41,4 +28,41 @@ export const addUser = async ({
 
   const data = await response.json();
   console.log(data);
+};
+
+export const getUsers = async ({
+  apiUrl,
+  apiKey,
+}: {
+  apiUrl: string;
+  apiKey: string;
+}) => {
+  const response = await fetch(`${apiUrl}/users`, {
+    method: "GET",
+    headers: {
+      "X-API-Key": apiKey,
+    },
+  });
+
+  if (!response.ok) {
+    console.log(await response.json());
+    throw new Error(`Error gettings users: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data;
+};
+
+export const listUsers = async ({
+  apiUrl,
+  apiKey,
+}: {
+  apiUrl: string;
+  apiKey: string;
+}) => {
+  const data = await getUsers({
+    apiUrl,
+    apiKey,
+  });
+  console.dir(data, { depth: null });
 };
