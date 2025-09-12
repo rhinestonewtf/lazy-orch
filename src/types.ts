@@ -1,15 +1,4 @@
-import { Address, Hex } from "viem";
-
-export type Simulation = {
-  success: false;
-  call: {
-    chainid: number;
-    to: Address;
-    value: string;
-    data: Hex;
-  };
-  details: {
-    blockNumber: string;
-    relayer: string;
-  };
+export type RelayerAttributes = {
+  settlementLayers: string[];
+  priority: number;
 };

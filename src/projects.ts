@@ -1,5 +1,6 @@
-import { checkbox, input, select } from "@inquirer/prompts";
+import { checkbox, input, number, select } from "@inquirer/prompts";
 import { getOrgs } from "./orgs";
+import { RelayerAttributes } from "./types";
 
 export const addProject = async ({
   apiUrl,
@@ -29,7 +30,7 @@ export const addProject = async ({
     ],
   });
 
-  const attributes: Record<string, boolean | string[]> = {};
+  const attributes: Record<string, boolean | RelayerAttributes> = {};
   attributesInput.forEach((attr) => {
     attributes[attr] = true;
   });
@@ -44,7 +45,14 @@ export const addProject = async ({
         { name: "Relay", value: "RELAY" },
       ],
     });
-    attributes["relayer"] = settlementLayers;
+    const priority = await number({
+      message: "Enter priority:",
+      required: true,
+    });
+    attributes.relayer = {
+      settlementLayers,
+      priority,
+    };
   }
 
   const name = await input({
