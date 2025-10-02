@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import { addUser, listUsers } from "./users";
 import { addOrg, addUserToOrg, listOrgs } from "./orgs";
 import { addProject, updateProjectAttributes } from "./projects";
-import { getSponsor } from "./sponsor";
+import { getSponsor, updateSponsorCredits } from "./sponsor";
 config();
 
 const getEnv = async () => {
@@ -81,6 +81,10 @@ const main = async () => {
         name: "Get sponsor",
         value: "getSponsor",
       },
+      {
+        name: "Update sponsor credits",
+        value: "updateSponsorCredits",
+      },
     ],
   });
 
@@ -129,6 +133,12 @@ const main = async () => {
   } else if (action == "getSponsor") {
     const { apiUrl, apiKey } = await getEnv();
     await getSponsor({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "updateSponsorCredits") {
+    const { apiUrl, apiKey } = await getEnv();
+    await updateSponsorCredits({
       apiUrl,
       apiKey,
     });

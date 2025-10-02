@@ -120,6 +120,7 @@ export const getOrgs = async ({
   });
 
   if (!response.ok) {
+    console.log(await response.json());
     throw new Error(`Error gettings users: ${response.statusText}`);
   }
 
