@@ -80,6 +80,11 @@ export const addProject = async ({
   console.log(data);
 };
 
+interface RelayerAttributes {
+  settlementLayers: string[];
+  priority: number;
+}
+
 export const updateProjectAttributes = async ({
   apiUrl,
   apiKey,
@@ -110,7 +115,7 @@ export const updateProjectAttributes = async ({
     ],
   });
 
-  const attributes: Record<string, boolean | string[] | number> = {};
+  const attributes: Record<string, boolean | RelayerAttributes> = {};
   attributesInput.forEach((attr) => {
     attributes[attr] = true;
   });
@@ -125,12 +130,12 @@ export const updateProjectAttributes = async ({
         { name: "Relay", value: "RELAY" },
       ],
     });
-    attributes["relayer"] = settlementLayers;
 
     const priority = await number({
       message: "Enter priority",
+      required: true,
     });
-    attributes["priority"] = priority ?? 0;
+    attributes["relayer"] = { settlementLayers, priority };
   }
 
   const response = await fetch(
