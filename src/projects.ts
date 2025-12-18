@@ -110,7 +110,7 @@ export const updateProjectAttributes = async ({
     ],
   });
 
-  const attributes: Record<string, boolean | string[]> = {};
+  const attributes: Record<string, boolean | string[] | number> = {};
   attributesInput.forEach((attr) => {
     attributes[attr] = true;
   });
@@ -126,6 +126,11 @@ export const updateProjectAttributes = async ({
       ],
     });
     attributes["relayer"] = settlementLayers;
+
+    const priority = await number({
+      message: "Enter priority",
+    });
+    attributes["priority"] = priority ?? 0;
   }
 
   const response = await fetch(
