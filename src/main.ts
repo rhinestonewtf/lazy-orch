@@ -4,6 +4,7 @@ import { addUser, listUsers } from "./users";
 import { addOrg, addUserToOrg, listOrgs } from "./orgs";
 import { addProject, updateProjectAttributes } from "./projects";
 import { getSponsor, updateSponsorCredits } from "./sponsor";
+import { getIntentStatus } from "./intents";
 config();
 
 const getEnv = async () => {
@@ -17,11 +18,6 @@ const getEnv = async () => {
       {
         name: "Dev",
         value: "dev",
-      },
-
-      {
-        name: "Staging",
-        value: "staging",
       },
       {
         name: "Prod",
@@ -38,9 +34,6 @@ const getEnv = async () => {
   } else if (environment === "dev") {
     apiUrl = "https://dev.v1.orchestrator.rhinestone.dev";
     apiKey = process.env.DEV_API_KEY || "";
-  } else if (environment === "staging") {
-    apiUrl = "https://staging.v1.orchestrator.rhinestone.dev";
-    apiKey = process.env.STAGING_API_KEY || "";
   } else if (environment === "prod") {
     apiUrl = "https://v1.orchestrator.rhinestone.dev";
     apiKey = process.env.PROD_API_KEY || "";
@@ -84,6 +77,10 @@ const main = async () => {
       {
         name: "Update sponsor credits",
         value: "updateSponsorCredits",
+      },
+      {
+        name: "Intent status",
+        value: "getIntentStatus",
       },
     ],
   });
@@ -139,6 +136,12 @@ const main = async () => {
   } else if (action == "updateSponsorCredits") {
     const { apiUrl, apiKey } = await getEnv();
     await updateSponsorCredits({
+      apiUrl,
+      apiKey,
+    });
+  } else if (action == "getIntentStatus") {
+    const { apiUrl, apiKey } = await getEnv();
+    await getIntentStatus({
       apiUrl,
       apiKey,
     });
